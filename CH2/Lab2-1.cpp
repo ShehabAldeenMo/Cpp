@@ -50,7 +50,14 @@ void complex::setImg(float i)
 
 void complex::print()
 {
-    std::cout << real << img << "i\n";
+    if (img > 0)
+    {
+        std::cout << real << "+" << img << "i\n";
+    }
+    else
+    {
+        std::cout << real << "-" << img << "i\n";
+    }
 }
 
 complex complex::add(complex c)
