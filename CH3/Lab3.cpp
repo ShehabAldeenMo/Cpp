@@ -2,10 +2,10 @@
 #include <iostream>
 #include <string>
 
-#define CALL_BY_REFERENCE 0
-#define CALL_BY_VALUE 1
+#define CALL_BY_REFERENCE 1
+#define CALL_BY_VALUE 0
 
-#define METHOD CALL_BY_VALUE
+#define METHOD CALL_BY_REFERENCE
 
 class stack
 {

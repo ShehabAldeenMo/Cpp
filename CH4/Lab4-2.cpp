@@ -27,7 +27,7 @@ public:
     void operator+=(float f);
     complex operator++();    // prefix
     complex operator++(int); // postfix
-    operator float() const;  // castinf operator
+    operator float() const;  // casting operator
     float getReal();
     float getImg();
     void setReal(float r);
@@ -99,14 +99,14 @@ void complex::operator+=(float f)
 complex complex::operator++()
 {
     complex c;
-    c.real++;
+    ++c.real;
     return c;
 }
 
 complex complex::operator++(int)
 {
     complex c;
-    ++c.real;
+    c.real++;
     return c;
 }
 

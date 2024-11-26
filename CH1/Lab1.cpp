@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 
+// object
 class complex
 {
     int real;
@@ -12,13 +13,13 @@ public:
     {
         real = img = 0;
     }
-    float getReal();
-    float getImg();
-    void setReal(float r);
-    void setImg(float i);
-    void print();
-    complex add(complex c);
-    complex sub(complex c);
+    float getReal();        // get real part
+    float getImg();         // get imaginary part
+    void setReal(float r);  // set value of real part
+    void setImg(float i);   // set value of imaginary part
+    void print();           // print number in complex format
+    complex add(complex c); // make add operations on complex numbers
+    complex sub(complex c); // make sub operations on complex numbers
 };
 
 float complex::getReal()
@@ -43,7 +44,14 @@ void complex::setImg(float i)
 
 void complex::print()
 {
-    std::cout << real << img << "i\n";
+    if (img > 0)
+    {
+        std::cout << real << "+" << img << "i\n";
+    }
+    else
+    {
+        std::cout << real << img << "i\n";
+    }
 }
 
 complex complex::add(complex c)

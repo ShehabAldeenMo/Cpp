@@ -43,12 +43,12 @@ public:
     friend void viewContent(stack s);
 };
 
-void stack::operator=(stack s) // this caller S1, that argument S2
+void stack::operator=(stack s) // this-> caller S1, that-> argument S2
 {
-    delete this->array;
-    this->tos = s.tos;
-    this->array = new int[size];
-    for (int i = 0; i < size; i++)
+    delete this->array;            // remove the old version of your array
+    this->tos = s.tos;             // copy the remaining stacks
+    this->array = new int[size];   // create new array
+    for (int i = 0; i < size; i++) // coping values
         array[i] = s.array[i];
 }
 
@@ -112,7 +112,7 @@ int main()
     /*
     By tracing you will find that call by value will make a copy object with copy constructor. at the end
     of viewContent function will delete this object ?
-    Trace and make case one will find that the destructor is already called because it's just a copyed version from object
+    Trace and make case one will find that the destructor is already called because it's just a copied version from object
      */
     viewContent(S1);
     std::cout << "S1 pop : " << S1.pop() << "\n";
