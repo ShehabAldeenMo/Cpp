@@ -2,15 +2,16 @@
 #include <iostream>
 #include <string>
 
+// object
 class stack
 {
     int size;
     int *array;
     int tos;
-    static int NumOfStacks;
+    static int NumOfStacks; // shared between all objects
 
 public:
-    stack(int size = 10)
+    stack(int size = 10) // default argument
     {
         NumOfStacks++;
         this->size = size;
@@ -24,10 +25,16 @@ public:
         delete[] array;
         std::cout << "This is the destructor\n";
     }
+
     void push(int);
     int pop(void);
     int getNumOfStacks();
 };
+
+int stack::getNumOfStacks()
+{
+    return NumOfStacks;
+}
 
 void stack::push(int ele)
 {
@@ -58,13 +65,8 @@ int stack::pop(void)
 
     return ele;
 }
-
-int stack::getNumOfStacks()
-{
-    return NumOfStacks;
-}
-
 // Preferred to use with class name rather than object
+// can be accessed globaly by name of class
 int stack::NumOfStacks = 0;
 
 int main()
