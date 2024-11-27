@@ -35,7 +35,7 @@ public:
     }
 };
 
-class Triangle : public GeoShape
+class Triangle : virtual public GeoShape
 {
 public:
     Triangle(int a = 0, int b = 0) : GeoShape(a, b)
@@ -70,7 +70,7 @@ public:
     }
 };
 
-class Rect : public GeoShape
+class Rect : virtual public GeoShape
 {
 public:
     Rect(int a = 0, int b = 0) : GeoShape(a, b)
