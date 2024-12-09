@@ -128,3 +128,4 @@ The virtual inheritance resolves this issue by ensuring that only one copy of `B
 
 ### Conclusion
 Understanding inheritance in C++—including the different types such as public, protected, and private inheritance—is fundamental to mastering object-oriented design. Additionally, while multiple inheritance can be a powerful feature, it should be used carefully to avoid ambiguities, and virtual inheritance is a key tool for solving those issues.
+
