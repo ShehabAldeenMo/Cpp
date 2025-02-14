@@ -43,15 +43,32 @@ If the object being passed to a function manages dynamic memory (e.g., through p
 **Example**:  
 An object contains a pointer to a dynamically allocated array. When this object is passed by value to a stand-alone function, the copied object is destructed upon exiting the function, deleting the array. The original object is left with a dangling pointer.
 
+![image](https://github.com/user-attachments/assets/13dd9485-06ba-4505-a685-c32fbc9b9015)
+
+- At function termination, The bitwise coping allocation object will call destructor of class and free array address.
+- 
 ---
 
 ### **Dynamic Area Problem Solutions**:
 
 1. **Passing by Reference**:  
-   Instead of creating a copy, the function operates directly on the original object by passing it by reference. This approach avoids the destruction of any shared dynamic memory.  
+   Instead of creating a copy, the function operates directly on the original object by passing it by reference. This approach avoids the destruction of any shared dynamic memory. at the end of function will remove the new reference but the object will remain the same.
+
+![image](https://github.com/user-attachments/assets/537eacca-88c2-40a7-bc17-503925067fe2)
+
 
 2. **Copy Constructor**:  
-   A copy constructor is a special constructor used to create a deep copy of an object. It ensures that the dynamic memory is not shared between the original and the copied object, but rather each object manages its own separate memory.  
+   A copy constructor is a special constructor used to create a deep copy of an object. It ensures that the dynamic memory is not shared between the original and the copied object, but rather each object manages its own separate memory.
+
+![image](https://github.com/user-attachments/assets/a6947895-ba09-496f-9a9d-9e1e5387408f)
+
+![image](https://github.com/user-attachments/assets/823d7286-6836-49d4-ab82-2a63bb916e10)
+
+Then the steps will be:
+![image](https://github.com/user-attachments/assets/2e05096b-4c64-4249-8072-055456936a19)
+![image](https://github.com/user-attachments/assets/40839ce2-f6da-493b-a002-1f219afd0602)
+![image](https://github.com/user-attachments/assets/a5499382-afbc-4617-8df3-233268dd2653)
+
 
 ---
 
@@ -66,6 +83,3 @@ An object contains a pointer to a dynamically allocated array. When this object 
 3. **Returning an Object by Value**:  
    When a function returns an object by value, the copy constructor ensures that the returned object is properly constructed.  
 
----
-
-This document discusses advanced concepts in C++ for better understanding and efficient programming practices.  
