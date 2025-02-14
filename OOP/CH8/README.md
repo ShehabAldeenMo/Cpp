@@ -153,6 +153,11 @@ ptr->m2();
 - Load the table at the run time.
 - The pointer always refers to the last implemented function for running object in the table.
 
+![image](https://github.com/user-attachments/assets/56b389eb-980c-4a94-9153-3117c6b7fe88)
+
+- That will help us to make standalone functions  
+
+![image](https://github.com/user-attachments/assets/441a219f-e82e-4d8e-986a-a1e39c63ee85)
 
 ---
 
@@ -219,7 +224,7 @@ virtual float calculateArea() = 0;
 ```
 
 + Can not make object from `Geoshape`. as it's a virtual function.
-+ Now Geoshape is abstract class as it contain at least one pure virtual function.
++ Now Geoshape is abstract class as it contains at least one pure virtual function.
 + Any class can inherit abstract class.
 + when inheritance from abstract the child must implement all the pure virtual functions of his base or it will be converted from concrete class to abstract one.
 + Pure virtual function should be implemented in the leaf of the tree at least one.
