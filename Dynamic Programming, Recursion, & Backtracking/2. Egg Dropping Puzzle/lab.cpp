@@ -77,10 +77,10 @@ int dpeggdrops(int n, int k)
 
 int main()
 {
-    cout << eggdrops(2, 10) << "\n";
+    // cout << eggdrops(2, 100) << "\n";
 
-    vector<vector<int>> myvec(2 + 1, vector<int>(10 + 1, -1));
-    cout << memeggdrops(2, 10, myvec) << "\n";
+    // vector<vector<int>> myvec(2 + 1, vector<int>(10 + 1, -1));
+    // cout << memeggdrops(2, 10, myvec) << "\n";
 
-    cout << dpeggdrops(2, 10) << "\n";
+    cout << dpeggdrops(2, 100) << "\n";
 }
