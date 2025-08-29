@@ -181,7 +181,7 @@ The **Standard Template Library** offers several advantages that make it an esse
 ---
 
 # Sequence Containers
-- `list`, `forward_list` and `deque` will be discussed soon.
+- `std::vector`, `list`, `forward_list` and `deque` will be discussed soon.
 ## `std::vector`
 
 ### 1. Vector Definition & Initialization
@@ -442,6 +442,281 @@ for (const auto& element : vec) {
     std::cout << element << std::endl;
 }
 ```
+
+## 🔁 `std::list` in C++
+
+### 1. List Definition & Initialization
+
+`std::list` is a **sequence container** that implements a **doubly linked list**. Unlike `std::vector`, it does **not** store elements in contiguous memory, but instead maintains pointers to both the next and previous elements, enabling fast insertions and deletions at any position.
+
+---
+
+### 🔑 Key Characteristics of `std::list`:
+
+1. ✅ **Doubly Linked List**: Each element points to both its previous and next neighbor.
+2. ✅ **Non-Contiguous Storage**: Unlike vectors, elements are not stored next to each other in memory.
+3. ✅ **Efficient Insert/Delete**: Very fast `insert`, `erase`, `push_front`, `push_back` (constant time if you have an iterator).
+4. ❌ **No Random Access**: You cannot use `list[i]` like vectors; must traverse with iterators.
+5. 🧪 **Stable Iterators**: Inserting or removing elements doesn’t invalidate other iterators (unlike vectors).
+
+---
+
+### 📘 Syntax for Declaration:
+
+```cpp
+std::list<T> myList;
+```
+
+Where `T` is the type of elements you want to store.
+
+---
+
+### 🧪 Examples of Initialization:
+
+#### 1. Default Initialization:
+
+```cpp
+std::list<int> myList1;
+```
+
+#### 2. Initialization with Size and Default Value:
+
+```cpp
+std::list<int> myList2(5);           // 5 default-initialized ints (value = 0)
+std::list<int> myList3(5, 42);       // 5 elements, each initialized to 42
+```
+
+#### 3. Initialization from Array:
+
+```cpp
+int arr[] = {1, 2, 3, 4};
+std::list<int> myList4(arr, arr + 4); // Copies elements from array
+```
+
+#### 4. Using Initializer List:
+
+```cpp
+std::list<int> myList5 = {10, 20, 30};
+```
+
+#### 5. Copy Constructor:
+
+```cpp
+std::list<int> myList6(myList5);
+```
+
+---
+
+### ✅ Why Use `std::list` Instead of a Manual Doubly Linked List?
+
+* 💡 **Well-tested**: STL implementations are optimized and bug-free.
+* ⚙️ **Rich Features**: Provides useful functions: `sort()`, `merge()`, `unique()`, `splice()`, `reverse()`.
+* 🧼 **Cleaner Code**: Saves you from writing boilerplate pointer code.
+
+---
+
+### ⚙️ Commonly Used Member Functions:
+
+| Operation          | Description                                 |
+| ------------------ | ------------------------------------------- |
+| `push_back(val)`   | Add element to end                          |
+| `push_front(val)`  | Add element to front                        |
+| `pop_back()`       | Remove last element                         |
+| `pop_front()`      | Remove first element                        |
+| `insert(it, val)`  | Insert before position `it`                 |
+| `erase(it)`        | Erase element at `it`                       |
+| `clear()`          | Removes all elements                        |
+| `size()`           | Returns number of elements                  |
+| `empty()`          | Checks whether the list is empty            |
+| `front()`/`back()` | Access first or last element                |
+| `sort()`           | Sorts the list (ascending order by default) |
+| `reverse()`        | Reverses the list                           |
+| `unique()`         | Removes consecutive duplicates              |
+
+---
+
+Absolutely! Here’s a comprehensive section on:
+
+---
+
+## ✅ 2. Functions of `std::list`
+
+Each of the following functions is accompanied by a simple and clear example in C++.
+
+---
+
+### 🔹 `push_back(val)`
+
+**Adds an element to the end of the list.**
+
+```cpp
+std::list<int> lst;
+lst.push_back(10);
+lst.push_back(20);  // lst: 10 20
+```
+
+---
+
+### 🔹 `push_front(val)`
+
+**Adds an element to the beginning of the list.**
+
+```cpp
+std::list<int> lst;
+lst.push_front(10);
+lst.push_front(5);  // lst: 5 10
+```
+
+---
+
+### 🔹 `pop_back()`
+
+**Removes the last element from the list.**
+
+```cpp
+std::list<int> lst = {1, 2, 3};
+lst.pop_back();     // lst: 1 2
+```
+
+---
+
+### 🔹 `pop_front()`
+
+**Removes the first element from the list.**
+
+```cpp
+std::list<int> lst = {1, 2, 3};
+lst.pop_front();    // lst: 2 3
+```
+
+---
+
+### 🔹 `insert(it, val)`
+
+**Inserts `val` before the position `it`.**
+
+```cpp
+std::list<int> lst = {1, 3};
+auto it = lst.begin();
+++it;
+lst.insert(it, 2);  // lst: 1 2 3
+```
+
+---
+
+### 🔹 `erase(it)`
+
+**Removes the element at iterator `it`.**
+
+```cpp
+std::list<int> lst = {1, 2, 3};
+auto it = lst.begin();
+++it;
+lst.erase(it);      // lst: 1 3
+```
+
+---
+
+### 🔹 `clear()`
+
+**Removes all elements.**
+
+```cpp
+std::list<int> lst = {1, 2, 3};
+lst.clear();        // lst: empty
+```
+
+---
+
+### 🔹 `size()`
+
+**Returns the number of elements.**
+
+```cpp
+std::list<int> lst = {10, 20, 30};
+std::cout << lst.size();  // Output: 3
+```
+
+---
+
+### 🔹 `empty()`
+
+**Checks whether the list is empty.**
+
+```cpp
+std::list<int> lst;
+std::cout << std::boolalpha << lst.empty();  // Output: true
+```
+
+---
+
+### 🔹 `front()` / `back()`
+
+**Accesses the first / last element.**
+
+```cpp
+std::list<int> lst = {100, 200, 300};
+std::cout << lst.front();  // Output: 100
+std::cout << lst.back();   // Output: 300
+```
+
+---
+
+### 🔹 `sort()`
+
+**Sorts the list in ascending order.**
+
+```cpp
+std::list<int> lst = {3, 1, 2};
+lst.sort();        // lst: 1 2 3
+```
+
+---
+
+### 🔹 `reverse()`
+
+**Reverses the list.**
+
+```cpp
+std::list<int> lst = {1, 2, 3};
+lst.reverse();     // lst: 3 2 1
+```
+
+---
+
+### 🔹 `unique()`
+
+**Removes **consecutive** duplicate elements.**
+
+```cpp
+std::list<int> lst = {1, 1, 2, 2, 3, 3};
+lst.unique();      // lst: 1 2 3
+```
+
+---
+
+### 🔹 `assign(n, val)`
+
+**Fills the list with `n` copies of `val`.**
+
+```cpp
+std::list<int> lst;
+lst.assign(3, 7);   // lst: 7 7 7
+```
+
+---
+
+### 🔹 `swap(lst2)`
+
+**Swaps content with another list.**
+
+```cpp
+std::list<int> a = {1, 2}, b = {9, 8};
+a.swap(b);         // a: 9 8, b: 1 2
+```
+
+---
+
 
 # Utility Components
 
@@ -978,3 +1253,174 @@ std::vector<int> myVec = {1, 2, 3, 4, 5};
 int sum = std::accumulate(myVec.begin(), myVec.end(), 0); // Sums the elements
 std::cout << "Sum: " << sum << std::endl; // Output: Sum: 15
 ```
+
+# Specialized Containers
+1. `priority_queue`
+A **`priority_queue`** in C++ is a **container adaptor** that provides constant time lookup of the largest (by default) element. It is part of the **Standard Template Library (STL)** and is implemented using a **heap** (specifically, a **max heap** by default).
+
+---
+
+### 🧠 **Key Concepts:**
+
+* It always keeps the **largest (or smallest)** element at the **top** depending on the comparator.
+* Internally implemented using **`std::vector`** and **`make_heap`, `push_heap`, `pop_heap`**.
+
+---
+
+### 📌 **Header:**
+
+```cpp
+#include <queue>
+```
+
+---
+
+### ✅ **Declaration (Max Heap by default):**
+
+```cpp
+std::priority_queue<int> pq;
+```
+
+### ✅ **Min Heap version:**
+
+```cpp
+std::priority_queue<int, std::vector<int>, std::greater<int>> minHeap;
+```
+
+---
+
+### 🔧 **Common Functions:**
+
+| Function           | Description                                                       |
+| ------------------ | ----------------------------------------------------------------- |
+| `push(elem)`       | Inserts an element                                                |
+| `pop()`            | Removes the top element (highest priority)                        |
+| `top()`            | Accesses the top element                                          |
+| `empty()`          | Returns `true` if queue is empty                                  |
+| `size()`           | Returns number of elements                                        |
+| `emplace(args...)` | Constructs and inserts in-place (like `push`, but more efficient) |
+| `swap(otherQueue)` | Swaps content with another priority queue                         |
+
+---
+
+### 📘 **Example (Max Heap):**
+
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+
+int main() {
+    priority_queue<int> pq;
+
+    pq.push(10);
+    pq.push(5);
+    pq.push(20);
+
+    cout << "Top element: " << pq.top() << endl; // 20
+
+    pq.pop(); // removes 20
+
+    cout << "New Top: " << pq.top() << endl; // 10
+
+    cout << "Size: " << pq.size() << endl;   // 2
+}
+```
+
+---
+
+### 📘 **Example (Min Heap):**
+
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+int main() {
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+    minHeap.push(10);
+    minHeap.push(5);
+    minHeap.push(20);
+
+    cout << "Top element: " << minHeap.top() << endl; // 5
+}
+```
+
+---
+
+### ✅ Example 1: Min-Heap for Integers Using Lambda
+
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+int main() {
+    auto cmp = [](int a, int b) {
+        return a > b;  // Min-heap: smaller values come first
+    };
+
+    priority_queue<int, vector<int>, decltype(cmp)> pq(cmp);
+
+    pq.push(30);
+    pq.push(10);
+    pq.push(20);
+
+    while (!pq.empty()) {
+        cout << pq.top() << " ";
+        pq.pop();
+    }
+    // Output: 10 20 30
+}
+```
+
+---
+
+### ✅ Example 2: Custom Struct with Lambda
+
+```cpp
+#include <iostream>
+#include <queue>
+#include <vector>
+using namespace std;
+
+struct Task {
+    int id;
+    int priority;
+};
+
+int main() {
+    auto cmp = [](const Task& a, const Task& b) {
+        return a.priority < b.priority;  // Max-heap: higher priority first
+    };
+
+    priority_queue<Task, vector<Task>, decltype(cmp)> pq(cmp);
+
+    pq.push({1, 5});
+    pq.push({2, 10});
+    pq.push({3, 1});
+
+    while (!pq.empty()) {
+        const Task& t = pq.top();
+        cout << "Task ID: " << t.id << ", Priority: " << t.priority << endl;
+        pq.pop();
+    }
+
+    // Output:
+    // Task ID: 2, Priority: 10
+    // Task ID: 1, Priority: 5
+    // Task ID: 3, Priority: 1
+}
+```
+
+---
+
+### 🧠 Key Points:
+
+* `decltype(cmp)` is used as the comparator type.
+* The lambda must be declared before `priority_queue` is instantiated.
+* This is **only possible since C++11** (because lambdas with capture or type deduction weren’t supported in earlier versions).
+
