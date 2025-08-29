@@ -20,9 +20,9 @@
 
 ### **What is `static_cast`?**
 
-`static_cast` is a *compile-time* type conversion operator in C++ used to perform *explicit* conversions between related types. <br />
-It is *static* because the compiler verifies the validity of the conversion at compile time, and no runtime type checking is performed (unlike `dynamic_cast`). <br />
-This makes `static_cast` faster but requires the programmer to ensure the conversion is valid to avoid unexpected behviours.
+`static_cast` is a **compile-time** type conversion operator in C++ used to perform **explicit** conversions between related types. <br />
+It is **static** because the compiler verifies the validity of the conversion at compile time, and no runtime type checking is performed (unlike `dynamic_cast`). <br />
+This makes `static_cast` **faster** but requires the programmer to ensure the conversion is valid to **avoid unexpected behviours**.
 
 ```cpp
 static_cast<target_type>(expression)
@@ -44,7 +44,6 @@ static_cast<target_type>(expression)
 1. **Compile-Time Checking**: The compiler ensures that the types involved in the conversion are compatible. If the conversion is invalid, a compile-time error is generated.
 2. **No Runtime Overhead**: Since type checking is done at compile time, `static_cast` is efficient and does not incur runtime performance penalties.
 3. **Explicit Conversion**: It makes the programmer’s *intent* clear, improving code readability and maintainability compared to C-style casts.
-4. **Restricted to Related Types**: `static_cast` can only be used for conversions that are well-defined, such as between numeric types, pointers in an inheritance hierarchy, or types with defined conversion operators/constructors.
 
 ---
 
@@ -55,7 +54,7 @@ Below are the primary use cases of `static_cast`, with examples for each, coveri
 ## 🔹 **1. Converting Between Numeric Types**
 `static_cast` is commonly used to convert between fundamental types like `int`, `float`, `double`, etc. This is useful when you need to perform arithmetic operations or ensure type compatibility.
 
-**Example (Without Inheritance):**
+**Example:**
 ```cpp
 #include <iostream>
 
@@ -82,8 +81,8 @@ Float division: 3.33333
 - `int` to `float`: Ensures floating-point division instead of integer division.
 
 **Key Points**:
-- Safe for numeric conversions, but be aware of *potential* data loss (e.g., precision loss when converting `double` to `int`).
-- No runtime checks are performed, so the programmer must ensure the conversion makes sense.
+- **Safe** for numeric conversions, but be aware of *potential* data loss (e.g., precision loss when converting `double` to `int`).
+- **No runtime** checks are performed, so the programmer must ensure the conversion makes sense.
 
 
 ## 🔹 **2. Converting Pointers in an Inheritance Hierarchy**
@@ -133,11 +132,10 @@ int main() {
     derivedPtr->derivedOnly();  // UB: Calls function that does not exist in Base object memory.
 
     std::cout << "==================================================================================\n";
-    Base *baseptr = new Base;  // down casting
+    Base *baseptr = new Base;  // down-casting
     Derived *derivedptr = new Derived;
-    
     if (dynamic_cast<Derived *>(baseptr))
-
+        std::cout << "huh?\n";
     return 0;
 }
 ```
@@ -150,6 +148,7 @@ Base class
 Base class
 Derived class without virtual keyword
 Derived-only function
+==================================================================================
 ```
 
 ## ✅ Key Takeaways:
@@ -160,8 +159,8 @@ Derived-only function
   Derived* → Base*
   ```
 
-  ✔️ Always safe and standard.<br />
-  ✔️ Works correctly for both virtual and non-virtual functions.<br />
+  ✔️ Always **safe** and **standard**.<br />
+  ✔️ Works correctly for **both** **virtual** and **non-virtual** functions.<br />
 
 * **Downcasting (Dangerous):**
 
@@ -172,18 +171,14 @@ Derived-only function
   ⚠️ Dangerous if the pointer does not actually point to a `Derived` object.<br />
   ❗ No compiler/runtime checks — you must guarantee the object type yourself.<br />
   ❌ Using functions exclusive to `Derived` may result in undefined behavior.<br />
-
-* **Polymorphism Impact:**
-
-  * **Virtual functions** behave correctly even when accessed via base pointers due to virtual table resolution.<br />
-  * **Non-virtual functions** always call the version based on the static type of the pointer.<br />
   
 ---
 
 ## 🔹 **3. Converting `void*` to a Specific Pointer Type**
 
-In C++, `static_cast` can be used to convert a `void*` to a specific pointer type.
-This is commonly needed when working with **legacy C APIs** that use `void*` for generic data.
+In C++, `static_cast` can be used to convert a `void*` to a specific pointer type.<br />
+This is commonly needed when working with **legacy C APIs** that use `void*` for generic data.<br />
+Couldn't use `dynamic_cast` with void pointers.<br />
 
 ### ✅ Example:
 
@@ -192,6 +187,7 @@ This is commonly needed when working with **legacy C APIs** that use `void*` for
 
 void printInt(void* ptr) {
     int* intPtr = static_cast<int*>(ptr); // Convert void* to int*
+    // int *intPtr = dynamic_cast<int *>(ptr); // lead to error case
     std::cout << "Value: " << *intPtr << std::endl;
 }
 
@@ -239,7 +235,7 @@ Value: 42
 
 ---
 
-## 🔹 **4. Converting Between References in Inheritanc**
+## 🔹 **4. Converting Between References in Inheritance**
 `static_cast` can convert references between base and derived classes, similar to pointer conversions.
 
 **Example (With Inheritance):**
@@ -298,7 +294,7 @@ void processSafely(Base& b) {
 - When runtime type checking is needed (use `dynamic_cast`).
 - When modifying `const` or `volatile` qualifiers (use `const_cast`).
 - When performing low-level, unsafe conversions between unrelated types (use `reinterpret_cast`).
-- When the conversion is invalid or unsafe (e.g., downcasting to an incorrect derived type).
+- When the conversion is invalid or unsafe (e.g., **downcasting** to an incorrect derived type).
 
 ---
 
@@ -322,6 +318,3 @@ void processSafely(Base& b) {
 
 3. **Avoid Overuse**:
    - Excessive casting may indicate poor design. Consider refactoring to avoid casts where possible (e.g., using polymorphism instead of downcasting).
-
-4. **Use with Polymorphic Types**:
-   - For inheritance-related casts, ensure the base class has at least one virtual function to enable polymorphism, especially if you might later use `dynamic_cast`.
