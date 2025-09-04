@@ -99,7 +99,7 @@ Objects in C++ can be allocated either **statically** or **dynamically**, depend
 ![image](https://github.com/user-attachments/assets/3c7c7205-3471-4b5c-b000-b305afc21228)
 ![image](https://github.com/user-attachments/assets/bf7b4162-c077-4d1f-8907-4ef89f71cc48)
 
-As shown in the previous, we construct Homw first without calling any object from rooms. 
+As shown in the previous, we construct Home first without calling any object from rooms. 
   
 - **Car and Engine**:
   - A car inherently includes an engine, and both are tightly coupled.

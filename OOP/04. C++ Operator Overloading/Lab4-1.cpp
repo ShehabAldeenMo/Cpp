@@ -10,23 +10,20 @@ class stack
     static int NumOfStacks;
 
 public:
-    stack(int size = 10)
+    stack(int size = 10) : tos(0), size(size)
     {
         NumOfStacks++;
-        this->size = size;
-        tos = 0;
         array = new int[size];
     }
 
-    stack(stack &z) // passing two parameters this:new one, z:old one
+    // copy constructor
+    stack(stack &z)
     {
         tos = z.tos;
         size = z.size;
         array = new int[size];
         for (int i = 0; i <= tos; i++)
-        {
             array[i] = z.array[i];
-        }
         NumOfStacks++;
     }
 
@@ -36,6 +33,7 @@ public:
         delete[] array;
         std::cout << "This is the destructor\n";
     }
+
     void operator=(stack s);
     void push(int);
     int pop(void);

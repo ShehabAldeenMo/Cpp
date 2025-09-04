@@ -9,47 +9,21 @@ class complex
     int img;
 
 public:
-    // constructor
-    complex(int real = 0, int img = 0)
-    {
-        this->real = real;
-        this->img = img;
-    }
-
-    // destructor
-    ~complex()
-    {
-        std::cout << "Destructor called\n";
-    }
-
-    float getReal();        // get real part
-    float getImg();         // get imaginary part
-    void setReal(float r);  // set value of real part
-    void setImg(float i);   // set value of imaginary part
-    void print();           // print number in complex format
-    complex add(complex c); // make add operations on complex numbers
-    complex sub(complex c); // make sub operations on complex numbers
+    complex(int real = 0, int img = 0) : real(real), img(img) {} // constructor
+    ~complex() { std::cout << "Destructor called\n"; }           // destructor
+    float getReal();                                             // get real part
+    float getImg();                                              // get imaginary part
+    void setReal(float r);                                       // set value of real part
+    void setImg(float i);                                        // set value of imaginary part
+    void print();                                                // print number in complex format
+    complex add(complex c);                                      // make add operations on complex numbers
+    complex sub(complex c);                                      // make sub operations on complex numbers
 };
 
-float complex::getReal()
-{
-    return real;
-}
-
-float complex::getImg()
-{
-    return img;
-}
-
-void complex::setReal(float r)
-{
-    real = r;
-}
-
-void complex::setImg(float i)
-{
-    img = i;
-}
+float complex::getReal() { return real; }
+float complex::getImg() { return img; }
+void complex::setReal(float r) { real = r; }
+void complex::setImg(float i) { img = i; }
 
 void complex::print()
 {
