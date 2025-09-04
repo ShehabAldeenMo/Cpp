@@ -1,26 +1,72 @@
 #include <iostream>
 #include <string>
+#include <assert.h>
+#include <type_traits>
 
 using namespace std;
 
 template <typename T>
-class ClassName
+class Box
 {
 private:
-    T value;
+    T first;
 
 public:
-    ClassName(T val) { value = val; }
-    void PrintValue()
+    void print()
     {
-        cout << "value: " << value << "\n";
+        cout << "T is: " << typeid(first).name() << "\n";
     }
 };
 
+template <typename T>
+class SafeBox
+{
+    T value;
+
+public:
+    SafeBox(T v)
+    {
+        assert(v >= 0 && "Precondition: Value must be non-negative.");
+        value = v;
+        assert(value >= 0 && "Invariant: Value must remain non-negative.");
+    }
+
+    void setValue(T v)
+    {
+        assert(v >= 0 && "Precondition: Value must be non-negative.");
+        value = v;
+    }
+
+    T getValue() const
+    {
+        assert(value >= 0 && "Invariant: Value must remain non-negative.");
+        return value;
+    }
+};
+
+template <typename T>
+void checkType(T arg)
+{
+    if constexpr (std::is_same<T, int>::value)
+        cout << "Type is int\n";
+    else if constexpr (std::is_same<T, double>::value)
+        cout << "Type is double\n";
+    else
+        cout << "Unknown type\n";
+}
+
 int main()
 {
-    ClassName inst1("shehab");
-    inst1.PrintValue();
-    ClassName inst2(589);
-    inst2.PrintValue();
+    Box<int> b;
+    b.print();
+
+    SafeBox<int> box(5);
+    cout << box.getValue() << endl;
+
+    // Uncommenting below will violate contract
+    // box.setValue(-1);
+
+    checkType(10);   // int
+    checkType(3.14); // double
+    checkType('A');  // Unknown
 }
