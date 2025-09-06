@@ -9,10 +9,7 @@ class complex
     int img;
 
 public:
-    complex()
-    {
-        real = img = 0;
-    }
+    complex() : real(0), img(0) {}
     float getReal();        // get real part
     float getImg();         // get imaginary part
     void setReal(float r);  // set value of real part
@@ -22,25 +19,13 @@ public:
     complex sub(complex c); // make sub operations on complex numbers
 };
 
-float complex::getReal()
-{
-    return real;
-}
+float complex::getReal() { return real; }
 
-float complex::getImg()
-{
-    return img;
-}
+float complex::getImg() { return img; }
 
-void complex::setReal(float r)
-{
-    real = r;
-}
+void complex::setReal(float r) { real = r; }
 
-void complex::setImg(float i)
-{
-    img = i;
-}
+void complex::setImg(float i) { img = i; }
 
 void complex::print()
 {

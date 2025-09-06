@@ -11,11 +11,9 @@ class stack
     static int NumOfStacks; // shared between all objects
 
 public:
-    stack(int size = 10) // default argument
+    stack(int size = 10) : size(size), tos(0) // default argument
     {
         NumOfStacks++;
-        this->size = size;
-        tos = 0;
         array = new int[size];
     }
 

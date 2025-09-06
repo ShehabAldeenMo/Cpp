@@ -15,11 +15,9 @@ class stack
     static int NumOfStacks;
 
 public:
-    stack(int size = 10)
+    stack(int size = 10) : size(size), tos(0) // default argument
     {
         NumOfStacks++;
-        this->size = size;
-        tos = 0;
         array = new int[size];
     }
 #if METHOD == CALL_BY_VALUE

@@ -19,7 +19,7 @@ Default arguments allow functions to be called with fewer arguments than they ar
 
 ---
 
-## 2. **Overloading Functions - Polymorphism**
+## 2. **Overloading Functions**
 Function overloading enables multiple functions with the same name but different parameter lists. This is a form of **compile-time polymorphism**, allowing the same function name to perform different tasks based on the arguments passed.
 
 ---
@@ -45,7 +45,7 @@ A **destructor** is a special member function automatically called when an objec
 ---
 
 ## 7. **Constructor Without Any Code Body**
-Even if a constructor has no explicit code body, it still exists and is executed. It performs default initialization tasks, such as setting up the object’s memory.
+Even if a constructor has no explicit code body, it still **exists** and is executed. It performs default initialization tasks, such as setting up the object’s memory.
 
 ---
 
@@ -60,7 +60,7 @@ Static attributes (or static member variables) are shared among all instances of
 ---
 
 ## 10. **Static Functions**
-Static functions are member functions that do not operate on specific instances of a class. They can access static attributes but cannot access non-static attributes or call non-static functions. Static functions are called using the class name instead of an object.
+Static functions are member functions that do **not operate on specific instances** of a class. They can access static attributes but cannot access non-static attributes or call non-static functions. Static functions are called using the class name instead of an object.
 
 ---
 
