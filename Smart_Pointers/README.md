@@ -65,7 +65,7 @@ Smart pointers are a feature in C++ that manage the lifetime of dynamically allo
 ### `std::unique_ptr`
 
 - **Definition**:  
-  A smart pointer that owns and manages a dynamically allocated object through a pointer. It ensures that the object is automatically deleted when the `std::unique_ptr` goes out of scope. 
+  A smart pointer that owns and manages a dynamically allocated object through a pointer. It ensures that the object is automatically deleted when the `std::unique_ptr` goes out of scope. It could be **movable**.
 
 - **Key Properties**:  
   - Ensures sole ownership of the object.
@@ -79,8 +79,8 @@ Smart pointers are a feature in C++ that manage the lifetime of dynamically allo
   A smart pointer that allows multiple `std::shared_ptr` instances to share ownership of the same dynamically allocated object, managing its lifetime through reference counting.
 
 - **Key Properties**:  
-  - Uses reference counting to track the number of owners.
-  - The object is destroyed when the last `std::shared_ptr` is destroyed or reset.
+  - Uses **reference counting** to track the number of owners.
+  - The object is destroyed when the **last** `std::shared_ptr` is destroyed or reset.
   - Supports copy and move operations.
 
 ---
@@ -88,12 +88,12 @@ Smart pointers are a feature in C++ that manage the lifetime of dynamically allo
 ### `std::weak_ptr`
 
 - **Definition**:  
-  A smart pointer that provides a non-owning reference to an object managed by `std::shared_ptr`. It does not contribute to the reference count. But could observable.
+  A smart pointer that provides a non-owning reference to an object managed by `std::shared_ptr`. It does not **contribute** to the reference count. But could **observable** only so couldn't be dereferenced.
 
 - **Key Properties**:  
   - Does not affect the reference count of the shared object.
-  - Prevents cyclic references by providing a temporary access mechanism.
-  - Can be converted to `std::shared_ptr` using `lock()` if the object still exists.
+  - Prevents **cyclic references** by providing a **temporary** access mechanism.
+  - Can be **converted** to `std::shared_ptr` using `lock()` if the object still exists.
 
 
 ## Features and Benefits
@@ -129,7 +129,7 @@ Smart pointers are a feature in C++ that manage the lifetime of dynamically allo
 - **Key Benefits**:  
   - **`std::unique_ptr`**: Sole ownership of a resource.
   - **`std::shared_ptr`**: Shared ownership with reference counting.
-  - **`std::weak_ptr`**: Non-owning reference for temporary access.
+  - **`std::weak_ptr`**: **Non-owning** reference for temporary access.
   - Improves code readability and maintainability by clarifying ownership responsibilities.
 
 # Detailed Explanation of Smart Pointer Types
@@ -141,7 +141,7 @@ Smart pointers are a feature in C++ that manage the lifetime of dynamically allo
   `std::unique_ptr` is a smart pointer that exclusively owns a dynamically allocated object. It guarantees that the resource it points to is automatically freed when the `unique_ptr` is destroyed, ensuring no resource leaks.
 
 - **Purpose**:  
-  It is used when the ownership of a resource should be unique, meaning only one `std::unique_ptr` can manage the resource at a time. This pointer is non-copyable, but it can be moved, ensuring that the ownership is transferred from one `unique_ptr` to another.
+  It is used when the ownership of a resource should be unique, meaning only one `std::unique_ptr` can manage the resource at a time. This pointer is **non-copyable**, but it can be **moved**, ensuring that the ownership is transferred from one `unique_ptr` to another.
 
 #### [Declaration & Initialization](#declaration--initialization)
 - **Declaration**:  
@@ -160,23 +160,59 @@ std::unique_ptr<int> ptr = new ObjectClass;
 ```
 
 - `Operations` and `Methods` (`release`, `reset`, `get`)
-`release()`: Releases the ownership of the resource, returning a raw pointer. The unique_ptr will no longer own the resource after calling release().
+- Note: the next operations used with `.` operator not with `->` operator.
+`release()`: Releases the ownership of the resource, returning a raw pointer. The unique_ptr will no longer own the resource after calling release() and don't need to call destructor.
 
 ```cpp
-int* rawPtr = ptr.release();  // Releases ownership, ptr is now null
+#include <iostream>
+#include <memory>
+
+class MyClass{
+public:
+    ~MyClass() {
+        std::cout << "Destructor is called\n";
+    }
+};
+
+int main() {
+    std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();
+    MyClass * ptr2 = ptr.release(); // Releases ownership, ptr is now null
+    return 0;
+}
 ```
 
-`reset()`: Resets the unique_ptr, optionally taking a new resource or nullptr. The old resource will be deleted if it exists.
+`reset()`: Resets the unique_ptr, optionally taking a new resource or nullptr. The old resource will be **deleted** if it exists.
 
 ```cpp
 ptr.reset();  // Deletes the current resource and sets ptr to nullptr
-ptr.reset(new int(20));  // Resets to a new resource
+ptr.reset(new int(20));  // Resets to a new resource and will call destructor
 ```
 
-`get()`: Returns the raw pointer that the unique_ptr is managing.
+`get()`: Returns the raw pointer that the `unique_ptr` is managing but **still** access the **unique pointer** and **use** it.
 
 ```cpp
-int* rawPtr = ptr.get();  // Accesses the raw pointer
+#include <iostream>
+#include <memory>
+
+class MyClass{
+public:
+    ~MyClass() {
+        std::cout << "Destructor is called\n";
+    }
+    
+    void print(){
+        std::cout << "I'm here\n";
+    }
+};
+
+int main() {
+    std::unique_ptr<MyClass> ptr = std::make_unique<MyClass>();
+    ptr.get();
+    MyClass* rawPtr = ptr.get();  // Accesses the raw pointer
+    rawPtr->print();
+    ptr->print();
+    return 0;
+}
 ```
 
 **Example Usage**
@@ -199,7 +235,7 @@ int main() {
 Value: 100
 ```
 
-Example 2: Ownership Transfer Since `std::unique_ptr` cannot be copied, it can only be moved to transfer ownership:
+Example 2: Ownership Transfer Since `std::unique_ptr` cannot be copied, it can only be **moved** to transfer ownership and won't call destructor after move its ownership because it just moving ownership:
 
 ```cpp
 std::unique_ptr<int> ptr1 = std::make_unique<int>(50);
@@ -269,7 +305,7 @@ MyClass destructor
   `std::shared_ptr` is a smart pointer that manages a dynamically allocated object with shared ownership. Multiple `shared_ptr`s can share ownership of the same resource, and the resource is automatically deallocated when the last `shared_ptr` managing it is destroyed.
 
 - **Purpose**:  
-  It is used when multiple parts of a program need to share ownership of a resource. The resource will not be freed until all `shared_ptr` instances that point to it have been destroyed or reset.
+  It is used when multiple parts of a program need to share ownership of a resource. The resource will not be freed until **all** `shared_ptr` instances that point to it have been **destroyed** or **reset**.
 
 ### [Declaration & Initialization](#declaration--initialization-1)
 - **Declaration**:  
@@ -288,7 +324,7 @@ std::shared_ptr<int> ptr = std::make_shared<int>(10);  // Initializes with a val
 
 **Reference Counting Mechanism**
 - **Reference Counting**:
-`std::shared_ptr` keeps track of how many `shared_ptr` objects point to the same resource via a reference count. Each time a new shared_ptr is created from another, the reference count is incremented. When a `shared_ptr` goes out of scope or is reset, the reference count is decremented. When the reference count reaches zero, the resource is automatically deallocated.
+`std::shared_ptr` keeps track of how many `shared_ptr` objects point to the same resource via a reference count. Each time a new `shared_ptr` is created from another, the reference count is incremented. When a `shared_ptr` goes out of scope or is reset, the reference count is decremented. When the reference count reaches zero, the resource is automatically deallocated.
 
 Example:
 
@@ -303,15 +339,16 @@ std::shared_ptr<int> ptr2 = ptr1;  // ref count = 2
 Returns the number of shared_ptr instances that share ownership of the same resource.
 
 ```cpp
-std::cout << "Use count: " << ptr1.use_count() << std::endl;
+std::cout << "Use count: " << ptr1.use_count() << std::endl; // 1
 ```
 
 - `reset()`:
-Resets the `shared_ptr`, optionally taking a new resource or nullptr. The old resource will be deleted if it exists.
+Resets the `shared_ptr`, optionally taking a new resource or nullptr. The old resource will be **deleted** if it exists.
 
 ```cpp
-ptr1.reset();  // Releases ownership and resets to nullptr
-ptr1.reset(new int(200));  // Resets to a new resource
+std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>();
+std::shared_ptr<MyClass> ptr2 = ptr1;
+ptr1.reset();  // reset and delete ownership of our pointer but till ptr2 usable and shared.
 ````
 
 - `get()`:
@@ -356,10 +393,10 @@ std::cout << "Use count: " << ptr1.use_count() << std::endl;  // 2
 
 ### [Definition and Purpose](#definition-and-purpose-2)
 - **Definition**:  
-  `std::weak_ptr` is a smart pointer that provides a non-owning, weak reference to an object managed by `std::shared_ptr`. It does not affect the reference count, meaning it doesn’t contribute to the lifetime of the object. It allows access to the managed object if it still exists but doesn’t prevent its deallocation when all `shared_ptr` instances are destroyed.
+  `std::weak_ptr` is a smart pointer that provides a **non-owning**, weak reference to an object managed by `std::shared_ptr`. It does **not** affect the reference count, meaning it doesn’t contribute to the lifetime of the object. It allows access to the managed object if it still exists but doesn’t prevent its deallocation when all `shared_ptr` instances are destroyed.
 
 - **Purpose**:  
-  The primary purpose of `std::weak_ptr` is to break circular references that can occur with `std::shared_ptr` by allowing objects to refer to each other without extending their lifetime. This is especially useful in cache management or observer patterns.
+  The primary purpose of `std::weak_ptr` is to break **circular references** that can occur with `std::shared_ptr` by allowing objects to refer to each other without extending their lifetime. This is especially useful in cache management or **observer** patterns.
 
 ### [Solving Cyclic References](#solving-cyclic-references)
 - **Cyclic References**:  
@@ -466,8 +503,78 @@ Object has been destroyed.
 ```
 
 **Explain**
-The `lock()` method of `std::weak_ptr` returns a `std::shared_ptr` (which owns the object), but the original `std::weak_ptr` (weakPtr in your example) remains a `std::weak_ptr` and once `locked` exit our scoop lead to destroy it.
+The `lock()` method of `std::weak_ptr` returns a `std::shared_ptr` (which owns the object), but the original `std::weak_ptr` (weakPtr in your example) remains a `std::weak_ptr` and once `locked` exit our scoop lead to destroy it without calling destructor because it's already shared and there's no chance to call destructor because there's no way to exist `weak_ptr` without `shared_ptr`.
 
+```cpp
+#include <iostream>
+#include <memory>
+
+class MyClass{
+public:
+    ~MyClass() {
+        std::cout << "Destructor is called\n";
+    }
+    
+    void print(){
+        std::cout << "I'm here\n";
+    }
+};
+
+int main() {
+    std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>();
+    std::shared_ptr<MyClass> ptr2 = ptr1;
+    std::weak_ptr weak= ptr1;
+    if(auto test = weak.lock()){
+        test->print();
+    }
+    std::cout << "after exist scoope of weak.lock()\n";  
+    for(;;);
+    return 0;
+}
+```
+
+
+```cpp
+
+class MyClass{
+public:
+    ~MyClass() {
+        std::cout << "Destructor is called\n";
+    }
+    
+    void print(){
+        std::cout << "I'm here\n";
+    }
+};
+
+int main() {
+    std::shared_ptr<MyClass> ptr1 = std::make_shared<MyClass>();
+    ptr1.reset();
+    std::weak_ptr weak= ptr1;
+    if(auto test = weak.lock()){
+        test->print();
+    }
+    std::cout << "after exist scoope of weak.lock()\n";  
+    for(;;);
+    return 0;
+}
+```
+
+- **Notes** on `weak_ptr`: It's just an observer. So you can't dereferneced it or use any operstions rather than what implemented already in weak pointers so you can't use public member functions because the weak pointer is observe for shared pointer 
+```cpp
+*weak               // ❌
+weak->somefunction  //❌
+```
+
+```cpp
+std::weak_ptr<int> wp;
+*wp;  // ❌ error: can't dereference weak_ptr
+
+auto sp = wp.lock();
+if (sp) {
+    std::cout << *sp << "\n";  // ✅ safe
+}
+```
 
 # Common Use Cases
 
