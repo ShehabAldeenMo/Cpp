@@ -29,8 +29,6 @@ Condition variables are a powerful synchronization mechanism in C++ for managing
 
 ---
 
-Very good question — this is about **why `std::condition_variable` requires `std::unique_lock`**, while normal locking can use `std::lock_guard`.
-
 # Why `unique_lock` in `withdrowMoney()`?
 
 Because of this line:
