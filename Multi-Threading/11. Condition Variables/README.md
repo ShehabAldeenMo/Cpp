@@ -28,3 +28,114 @@ Condition variables are a powerful synchronization mechanism in C++ for managing
    - **Wait for some condition**: Block threads until the condition becomes true.
 
 ---
+
+Very good question — this is about **why `std::condition_variable` requires `std::unique_lock`**, while normal locking can use `std::lock_guard`.
+
+# Why `unique_lock` in `withdrowMoney()`?
+
+Because of this line:
+
+```cpp
+cv.wait(ul, [] { return (balance != 0); });
+```
+
+### Important:
+
+`std::condition_variable::wait()` **requires a `std::unique_lock<std::mutex>`**.
+
+Why?
+
+Because `wait()` must:
+
+1. **Unlock the mutex**
+2. Put the thread to sleep
+3. When notified → wake up
+4. **Re-lock the mutex before returning**
+
+That means the lock must support:
+
+* manual unlock
+* manual relock
+
+* `std::lock_guard` **cannot do that**
+* `std::unique_lock` **can do that**
+
+That’s the key reason.
+
+---
+
+### What actually happens inside `wait()`?
+
+Conceptually:
+
+```cpp
+while (!predicate()) {
+    ul.unlock();
+    sleep();
+    ul.lock();
+}
+```
+
+Only `unique_lock` supports `unlock()` and `lock()` operations.
+
+---
+
+# Why `lock_guard` in `addMoney()`?
+
+In `addMoney()`:
+
+```cpp
+std::lock_guard<std::mutex> lg(n);
+balance += money;
+cv.notify_one();
+```
+
+We:
+
+* Lock
+* Modify shared data
+* Notify
+* Automatically unlock at scope end
+
+We **never need to manually unlock and relock**, so:
+
+   `lock_guard` is perfect
+   It's simpler
+   Slightly faster
+   Cannot be misused
+
+---
+
+# 🔹 So what is the difference?
+
+| Feature                        | lock_guard | unique_lock      |
+| ------------------------------ | ---------- | ---------------- |
+| RAII locking                   | ✅          | ✅                |
+| Manual unlock                  | ❌          | ✅                |
+| Manual relock                  | ❌          | ✅                |
+| Required by condition_variable | ❌          | ✅                |
+| Lightweight                    | ✅          | Slightly heavier |
+
+---
+
+# Could we use `unique_lock` in both?
+
+Yes
+
+This would also work:
+
+```cpp
+std::unique_lock<std::mutex> ul(n);
+```
+
+But it’s unnecessary in `addMoney()` since we don’t need the extra features.
+
+Best practice:
+
+* Use **lock_guard** when simple locking is enough
+* Use **unique_lock** when:
+
+  * Using condition_variable
+  * Need manual unlock/relock
+  * Need deferred locking
+  * Need try_lock
